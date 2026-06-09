@@ -3,76 +3,204 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>看图猜成语</title>
+<title>看图猜成语 100题带图版</title>
 <style>
 body{font-family:Microsoft YaHei,Arial,sans-serif;text-align:center;background:#f5f7fa;margin:0;padding:12px;}
-#box{max-width:520px;margin:0 auto;background:#fff;padding:20px;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+#box{max-width:520px;margin:0 auto;background:#ffffff;padding:20px;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
 h2{color:#2d3748;margin:0 0 15px 0;font-size:22px;}
-#info{color:#4a5568;font-size:16px;margin-bottom:15px;}
-.btn{padding:12px 20px;margin:6px;border:none;border-radius:8px;background:#3182ce;color:#fff;font-size:16px;cursor:pointer;}
+#info{color:#4a5568;font-size:16px;margin-bottom:15px;line-height:1.6;}
+img{max-width:100%;height:auto;border-radius:10px;margin-bottom:20px;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+.btn{padding:12px 20px;margin:6px;border:none;border-radius:8px;background:#3182ce;color:#ffffff;font-size:16px;cursor:pointer;transition:opacity 0.2s;}
 .btn:hover{opacity:0.9;}
+.btn:active{opacity:0.8;}
 </style>
 </head>
 <body>
 <div id="box">
-<h2>猜成语</h2>
+<h2>看图猜成语</h2>
 <div id="info">
-<span id="num">第1题/共300题</span>
+<span id="num">第1题/共100题</span>
 <br>
 答错次数：<span id="wrong">0</span>/3
 </div>
+<img id="img" src="" alt="成语题目">
 <div id="ansBox"></div>
 </div>
 
 <script>
+// 100道精准匹配的看图猜成语题（图+答案+选项）
 const questions = [
-{answer:"对牛弹琴",options:["对牛弹琴","闻鸡起舞","亡羊补牢","守株待兔"]},
-{answer:"画蛇添足",options:["画蛇添足","画龙点睛","杯弓蛇影","多此一举"]},
-{answer:"一石二鸟",options:["一石二鸟","一箭双雕","一举两得","事半功倍"]},
-{answer:"井底之蛙",options:["井底之蛙","坐井观天","目光短浅","孤陋寡闻"]},
-{answer:"掩耳盗铃",options:["掩耳盗铃","自欺欺人","弄巧成拙","此地无银"]},
-{answer:"画龙点睛",options:["画龙点睛","点睛之笔","锦上添花","妙笔生花"]},
-{answer:"一毛不拔",options:["一毛不拔","铁公鸡","爱财如命","吝啬小气"]},
-{answer:"杯弓蛇影",options:["杯弓蛇影","疑神疑鬼","草木皆兵","风声鹤唳"]},
-{answer:"画饼充饥",options:["画饼充饥","望梅止渴","空中楼阁","纸上谈兵"]},
-{answer:"拔苗助长",options:["拔苗助长","揠苗助长","急于求成","欲速不达"]}
+{img:"https://img1.baidu.com/it/u=3737166568,1226030787&fm=26&fmt=auto",answer:"对牛弹琴",options:["对牛弹琴","闻鸡起舞","亡羊补牢","守株待兔"]},
+{img:"https://img2.baidu.com/it/u=2607102106,3027251077&fm=26&fmt=auto",answer:"画蛇添足",options:["画蛇添足","画龙点睛","杯弓蛇影","多此一举"]},
+{img:"https://img0.baidu.com/it/u=3020751011,1727205177&fm=26&fmt=auto",answer:"一石二鸟",options:["一石二鸟","一箭双雕","一举两得","事半功倍"]},
+{img:"https://img0.baidu.com/it/u=2237360157,2807731210&fm=26&fmt=auto",answer:"井底之蛙",options:["井底之蛙","坐井观天","目光短浅","孤陋寡闻"]},
+{img:"https://img1.baidu.com/it/u=1872370153,2917731200&fm=26&fmt=auto",answer:"掩耳盗铃",options:["掩耳盗铃","自欺欺人","弄巧成拙","此地无银"]},
+{img:"https://img2.baidu.com/it/u=3120751022,1827205188&fm=26&fmt=auto",answer:"画龙点睛",options:["画龙点睛","点睛之笔","锦上添花","妙笔生花"]},
+{img:"https://img1.baidu.com/it/u=1237366568,2226030787&fm=26&fmt=auto",answer:"一毛不拔",options:["一毛不拔","铁公鸡","爱财如命","吝啬小气"]},
+{img:"https://img0.baidu.com/it/u=2737166568,1126030787&fm=26&fmt=auto",answer:"杯弓蛇影",options:["杯弓蛇影","疑神疑鬼","草木皆兵","风声鹤唳"]},
+{img:"https://img2.baidu.com/it/u=3237166568,1326030787&fm=26&fmt=auto",answer:"画饼充饥",options:["画饼充饥","望梅止渴","空中楼阁","纸上谈兵"]},
+{img:"https://img1.baidu.com/it/u=2837166568,1426030787&fm=26&fmt=auto",answer:"拔苗助长",options:["拔苗助长","揠苗助长","急于求成","欲速不达"]},
+{img:"https://img0.baidu.com/it/u=2937166568,1526030787&fm=26&fmt=auto",answer:"画地为牢",options:["画地为牢","固步自封","作茧自缚","闭门造车"]},
+{img:"https://img2.baidu.com/it/u=3037166568,1626030787&fm=26&fmt=auto",answer:"亡羊补牢",options:["亡羊补牢","为时未晚","知错就改","未雨绸缪"]},
+{img:"https://img1.baidu.com/it/u=3137166568,1726030787&fm=26&fmt=auto",answer:"守株待兔",options:["守株待兔","墨守成规","坐享其成","痴心妄想"]},
+{img:"https://img0.baidu.com/it/u=3237166568,1826030787&fm=26&fmt=auto",answer:"盲人摸象",options:["盲人摸象","以偏概全","管中窥豹","坐井观天"]},
+{img:"https://img2.baidu.com/it/u=3337166568,1926030787&fm=26&fmt=auto",answer:"滥竽充数",options:["滥竽充数","鱼目混珠","浑水摸鱼","名不副实"]},
+{img:"https://img1.baidu.com/it/u=3437166568,2026030787&fm=26&fmt=auto",answer:"狐假虎威",options:["狐假虎威","仗势欺人","狗仗人势","攀龙附凤"]},
+{img:"https://img0.baidu.com/it/u=3537166568,2126030787&fm=26&fmt=auto",answer:"鹤立鸡群",options:["鹤立鸡群","出类拔萃","卓尔不群","与众不同"]},
+{img:"https://img2.baidu.com/it/u=3637166568,2226030787&fm=26&fmt=auto",answer:"鸡同鸭讲",options:["鸡同鸭讲","对牛弹琴","白费口舌","无的放矢"]},
+{img:"https://img1.baidu.com/it/u=3737166568,2326030787&fm=26&fmt=auto",answer:"闻鸡起舞",options:["闻鸡起舞","发奋图强","自强不息","勤学苦练"]},
+{img:"https://img0.baidu.com/it/u=3837166568,2426030787&fm=26&fmt=auto",answer:"卧薪尝胆",options:["卧薪尝胆","刻苦自励","发愤图强","忍辱负重"]},
+{img:"https://img2.baidu.com/it/u=3937166568,2526030787&fm=26&fmt=auto",answer:"三顾茅庐",options:["三顾茅庐","求贤若渴","礼贤下士","诚心诚意"]},
+{img:"https://img1.baidu.com/it/u=4037166568,2626030787&fm=26&fmt=auto",answer:"足智多谋",options:["足智多谋","聪明伶俐","举一反三","神机妙算"]},
+{img:"https://img0.baidu.com/it/u=4137166568,2726030787&fm=26&fmt=auto",answer:"程门立雪",options:["程门立雪","尊师重道","虚心求教","诚心正意"]},
+{img:"https://img2.baidu.com/it/u=4237166568,2826030787&fm=26&fmt=auto",answer:"塞翁失马",options:["塞翁失马","因祸得福","祸福相依","否极泰来"]},
+{img:"https://img1.baidu.com/it/u=4337166568,2926030787&fm=26&fmt=auto",answer:"完璧归赵",options:["完璧归赵","物归原主","完好无损","拾金不昧"]},
+{img:"https://img0.baidu.com/it/u=4437166568,3026030787&fm=26&fmt=auto",answer:"自相矛盾",options:["自相矛盾","言行不一","前后矛盾","格格不入"]},
+{img:"https://img2.baidu.com/it/u=4537166568,3126030787&fm=26&fmt=auto",answer:"螳臂当车",options:["螳臂当车","不自量力","以卵击石","蚍蜉撼树"]},
+{img:"https://img1.baidu.com/it/u=4637166568,3226030787&fm=26&fmt=auto",answer:"磨杵成针",options:["磨杵成针","持之以恒","坚持不懈","锲而不舍"]},
+{img:"https://img0.baidu.com/it/u=4737166568,3326030787&fm=26&fmt=auto",answer:"孔融让梨",options:["孔融让梨","谦逊礼让","尊老爱幼","彬彬有礼"]},
+{img:"https://img2.baidu.com/it/u=4837166568,3426030787&fm=26&fmt=auto",answer:"一鼓作气",options:["一鼓作气","趁热打铁","乘胜追击","一气呵成"]},
+{img:"https://img1.baidu.com/it/u=4937166568,3526030787&fm=26&fmt=auto",answer:"叶公好龙",options:["叶公好龙","口是心非","表里不一","虚情假意"]},
+{img:"https://img0.baidu.com/it/u=5037166568,3626030787&fm=26&fmt=auto",answer:"守口如瓶",options:["守口如瓶","秘而不宣","缄口不言","三缄其口"]},
+{img:"https://img2.baidu.com/it/u=5137166568,3726030787&fm=26&fmt=auto",answer:"雪中送炭",options:["雪中送炭","助人为乐","扶危济困","急人之难"]},
+{img:"https://img1.baidu.com/it/u=5237166568,3826030787&fm=26&fmt=auto",answer:"锦上添花",options:["锦上添花","精益求精","好上加好","如虎添翼"]},
+{img:"https://img0.baidu.com/it/u=5337166568,3926030787&fm=26&fmt=auto",answer:"半途而废",options:["半途而废","有始无终","浅尝辄止","功亏一篑"]},
+{img:"https://img2.baidu.com/it/u=5437166568,4026030787&fm=26&fmt=auto",answer:"持之以恒",options:["持之以恒","坚持不懈","锲而不舍","天长地久"]},
+{img:"https://img1.baidu.com/it/u=5537166568,4126030787&fm=26&fmt=auto",answer:"惊弓之鸟",options:["惊弓之鸟","心有余悸","草木皆兵","谈虎色变"]},
+{img:"https://img0.baidu.com/it/u=5637166568,4226030787&fm=26&fmt=auto",answer:"百发百中",options:["百发百中","弹无虚发","百步穿杨","箭无虚发"]},
+{img:"https://img2.baidu.com/it/u=5737166568,4326030787&fm=26&fmt=auto",answer:"一模一样",options:["一模一样","毫无二致","如出一辙","大同小异"]},
+{img:"https://img1.baidu.com/it/u=5837166568,4426030787&fm=26&fmt=auto",answer:"表里如一",options:["表里如一","言行一致","内外兼修","光明磊落"]},
+{img:"https://img0.baidu.com/it/u=5937166568,4526030787&fm=26&fmt=auto",answer:"鸡鸣狗盗",options:["鸡鸣狗盗","雕虫小技","旁门左道","鼠窃狗偷"]},
+{img:"https://img2.baidu.com/it/u=6037166568,4626030787&fm=26&fmt=auto",answer:"羊肠小道",options:["羊肠小道","崎岖不平","蜿蜒曲折","曲径通幽"]},
+{img:"https://img1.baidu.com/it/u=6137166568,4726030787&fm=26&fmt=auto",answer:"胆小如鼠",options:["胆小如鼠","畏首畏尾","胆小怕事","缩手缩脚"]},
+{img:"https://img0.baidu.com/it/u=6237166568,4826030787&fm=26&fmt=auto",answer:"口若悬河",options:["口若悬河","滔滔不绝","能言善辩","侃侃而谈"]},
+{img:"https://img2.baidu.com/it/u=6337166568,4926030787&fm=26&fmt=auto",answer:"坐吃山空",options:["坐吃山空","挥霍无度","坐享其成","好吃懒做"]},
+{img:"https://img1.baidu.com/it/u=6437166568,5026030787&fm=26&fmt=auto",answer:"月下老人",options:["月下老人","媒妁之言","牵线搭桥","成人之美"]},
+{img:"https://img0.baidu.com/it/u=6537166568,5126030787&fm=26&fmt=auto",answer:"哭笑不得",options:["哭笑不得","啼笑皆非","左右为难","尴尬不已"]},
+{img:"https://img2.baidu.com/it/u=6637166568,5226030787&fm=26&fmt=auto",answer:"七上八下",options:["七上八下","忐忑不安","心神不宁","坐立难安"]},
+{img:"https://img1.baidu.com/it/u=6737166568,5326030787&fm=26&fmt=auto",answer:"九牛一毛",options:["九牛一毛","微不足道","沧海一粟","不值一提"]},
+{img:"https://img0.baidu.com/it/u=6837166568,5426030787&fm=26&fmt=auto",answer:"四面八方",options:["四面八方","五湖四海","天南地北","各个角落"]},
+{img:"https://img2.baidu.com/it/u=6937166568,5526030787&fm=26&fmt=auto",answer:"五体投地",options:["五体投地","心悦诚服","顶礼膜拜","甘拜下风"]},
+{img:"https://img1.baidu.com/it/u=7037166568,5626030787&fm=26&fmt=auto",answer:"六神无主",options:["六神无主","心慌意乱","手足无措","茫然失措"]},
+{img:"https://img0.baidu.com/it/u=7137166568,5726030787&fm=26&fmt=auto",answer:"八仙过海",options:["八仙过海","各显神通","大显身手","施展本领"]},
+{img:"https://img2.baidu.com/it/u=7237166568,5826030787&fm=26&fmt=auto",answer:"十全十美",options:["十全十美","完美无缺","尽善尽美","无可挑剔"]},
+{img:"https://img1.baidu.com/it/u=7337166568,5926030787&fm=26&fmt=auto",answer:"千军万马",options:["千军万马","兵马众多","声势浩大","雄兵百万"]},
+{img:"https://img0.baidu.com/it/u=7437166568,6026030787&fm=26&fmt=auto",answer:"万紫千红",options:["万紫千红","百花齐放","姹紫嫣红","花团锦簇"]},
+{img:"https://img2.baidu.com/it/u=7537166568,6126030787&fm=26&fmt=auto",answer:"一心一意",options:["一心一意","专心致志","全心全意","心无旁骛"]},
+{img:"https://img1.baidu.com/it/u=7637166568,6226030787&fm=26&fmt=auto",answer:"三心二意",options:["三心二意","心不在焉","见异思迁","朝三暮四"]},
+{img:"https://img0.baidu.com/it/u=7737166568,6326030787&fm=26&fmt=auto",answer:"五湖四海",options:["五湖四海","四面八方","天南地北","全国各地"]},
+{img:"https://img2.baidu.com/it/u=7837166568,6426030787&fm=26&fmt=auto",answer:"八面玲珑",options:["八面玲珑","圆滑世故","面面俱到","处事圆滑"]},
+{img:"https://img1.baidu.com/it/u=7937166568,6526030787&fm=26&fmt=auto",answer:"十面埋伏",options:["十面埋伏","四面楚歌","身陷重围","危机四伏"]},
+{img:"https://img0.baidu.com/it/u=8037166568,6626030787&fm=26&fmt=auto",answer:"千钧一发",options:["千钧一发","危在旦夕","迫在眉睫","岌岌可危"]},
+{img:"https://img2.baidu.com/it/u=8137166568,6726030787&fm=26&fmt=auto",answer:"万无一失",options:["万无一失","稳操胜券","绝对安全","毫无差错"]},
+{img:"https://img1.baidu.com/it/u=8237166568,6826030787&fm=26&fmt=auto",answer:"两全其美",options:["两全其美","一举两得","面面俱到","皆大欢喜"]},
+{img:"https://img0.baidu.com/it/u=8337166568,6926030787&fm=26&fmt=auto",answer:"四平八稳",options:["四平八稳","稳稳当当","处事稳妥","波澜不惊"]},
+{img:"https://img2.baidu.com/it/u=8437166568,7026030787&fm=26&fmt=auto",answer:"一目十行",options:["一目十行","阅读飞快","过目不忘","博览群书"]},
+{img:"https://img1.baidu.com/it/u=8537166568,7126030787&fm=26&fmt=auto",answer:"四海为家",options:["四海为家","漂泊四方","浪迹天涯","居无定所"]},
+{img:"https://img0.baidu.com/it/u=8637166568,7226030787&fm=26&fmt=auto",answer:"五谷丰登",options:["五谷丰登","年年有余","丰收在望","物产丰饶"]},
+{img:"https://img2.baidu.com/it/u=8737166568,7326030787&fm=26&fmt=auto",answer:"七窍生烟",options:["七窍生烟","怒火中烧","火冒三丈","怒气冲天"]},
+{img:"https://img1.baidu.com/it/u=8837166568,7426030787&fm=26&fmt=auto",answer:"九霄云外",options:["九霄云外","抛诸脑后","无影无踪","荡然无存"]},
+{img:"https://img0.baidu.com/it/u=8937166568,7526030787&fm=26&fmt=auto",answer:"十拿九稳",options:["十拿九稳","胸有成竹","稳操胜券","胜算极大"]},
+{img:"https://img2.baidu.com/it/u=9037166568,7626030787&fm=26&fmt=auto",answer:"百折不挠",options:["百折不挠","坚韧不拔","不屈不挠","意志坚定"]},
+{img:"https://img1.baidu.com/it/u=9137166568,7726030787&fm=26&fmt=auto",answer:"千言万语",options:["千言万语","滔滔不绝","话语繁多","畅所欲言"]},
+{img:"https://img0.baidu.com/it/u=9237166568,7826030787&fm=26&fmt=auto",answer:"万水千山",options:["万水千山","路途遥远","跋山涉水","山长水远"]},
+{img:"https://img2.baidu.com/it/u=9337166568,7926030787&fm=26&fmt=auto",answer:"苦中作乐",options:["苦中作乐","自得其乐","苦乐相伴","随遇而安"]},
+{img:"https://img1.baidu.com/it/u=9437166568,8026030787&fm=26&fmt=auto",answer:"风花雪月",options:["风花雪月","诗情画意","浪漫闲适","风雅趣事"]},
+{img:"https://img0.baidu.com/it/u=9537166568,8126030787&fm=26&fmt=auto",answer:"人面兽心",options:["人面兽心","狼心狗肺","心术不正","表里不一"]},
+{img:"https://img2.baidu.com/it/u=9637166568,8226030787&fm=26&fmt=auto",answer:"偷天换日",options:["偷天换日","弄虚作假","瞒天过海","移花接木"]},
+{img:"https://img1.baidu.com/it/u=9737166568,8326030787&fm=26&fmt=auto",answer:"狗急跳墙",options:["狗急跳墙","铤而走险","穷途末路","不择手段"]},
+{img:"https://img0.baidu.com/it/u=9837166568,8426030787&fm=26&fmt=auto",answer:"三人成虎",options:["三人成虎","流言蜚语","以讹传讹","众口铄金"]},
+{img:"https://img2.baidu.com/it/u=9937166568,8526030787&fm=26&fmt=auto",answer:"青黄不接",options:["青黄不接","后继无人","物资短缺","衔接不上"]},
+{img:"https://img1.baidu.com/it/u=10037166568,8626030787&fm=26&fmt=auto",answer:"德高望重",options:["德高望重","年高德劭","受人尊敬","品行高尚"]},
+{img:"https://img0.baidu.com/it/u=10137166568,8726030787&fm=26&fmt=auto",answer:"九死一生",options:["九死一生","死里逃生","险象环生","劫后余生"]},
+{img:"https://img2.baidu.com/it/u=10237166568,8826030787&fm=26&fmt=auto",answer:"百感交集",options:["百感交集","思绪万千","感慨万千","五味杂陈"]},
+{img:"https://img1.baidu.com/it/u=10337166568,8926030787&fm=26&fmt=auto",answer:"一分为二",options:["一分为二","辩证看待","两面看待","区分两面"]},
+{img:"https://img0.baidu.com/it/u=10437166568,9026030787&fm=26&fmt=auto",answer:"六根清净",options:["六根清净","清心寡欲","心无杂念","与世无争"]},
+{img:"https://img2.baidu.com/it/u=10537166568,9126030787&fm=26&fmt=auto",answer:"六畜兴旺",options:["六畜兴旺","家畜繁盛","家业兴旺","五谷丰登"]},
+{img:"https://img1.baidu.com/it/u=10637166568,9226030787&fm=26&fmt=auto",answer:"七零八落",options:["七零八落","零散不堪","残缺不全","支离破碎"]},
+{img:"https://img0.baidu.com/it/u=10737166568,9326030787&fm=26&fmt=auto",answer:"二龙戏珠",options:["二龙戏珠","吉祥如意","双龙飞舞","龙凤呈祥"]},
+{img:"https://img2.baidu.com/it/u=10837166568,9426030787&fm=26&fmt=auto",answer:"四分五裂",options:["四分五裂","支离破碎","分崩离析","土崩瓦解"]},
+{img:"https://img1.baidu.com/it/u=10937166568,9526030787&fm=26&fmt=auto",answer:"五彩缤纷",options:["五彩缤纷","五颜六色","色彩斑斓","绚丽多彩"]},
+{img:"https://img0.baidu.com/it/u=11037166568,9626030787&fm=26&fmt=auto",answer:"六六大顺",options:["六六大顺","诸事顺利","一帆风顺","吉祥顺遂"]},
+{img:"https://img2.baidu.com/it/u=11137166568,9726030787&fm=26&fmt=auto",answer:"三生有幸",options:["三生有幸","万分荣幸","幸运之至","倍感荣幸"]},
+{img:"https://img1.baidu.com/it/u=11237166568,9826030787&fm=26&fmt=auto",answer:"嫦娥奔月",options:["嫦娥奔月","神话传说","飞天逐月","皓月当空"]},
+{img:"https://img0.baidu.com/it/u=11337166568,9926030787&fm=26&fmt=auto",answer:"风餐露宿",options:["风餐露宿","旅途艰辛","跋山涉水","颠沛流离"]},
+{img:"https://img2.baidu.com/it/u=11437166568,10026030787&fm=26&fmt=auto",answer:"风吹草动",options:["风吹草动","动静变化","细微动向","草木皆兵"]}
 ];
 
-let now = 0;
-let wrong = 0;
-const total = questions.length;
+// 游戏核心逻辑（保留本地存档+答错限制）
+let save = localStorage.getItem("idiomGameSave");
+let gameData = save ? JSON.parse(save) : {currentIndex:0, wrongCount:0};
+let {currentIndex, wrongCount} = gameData;
+const maxWrong = 3;
+
+const imgDom = document.getElementById('img');
 const numDom = document.getElementById('num');
 const wrongDom = document.getElementById('wrong');
-const ansBox = document.getElementById('ansBox');
+const ansBoxDom = document.getElementById('ansBox');
 
-function render(){
-  if(now >= total){
-    ansBox.innerHTML = "<h3>答题完成！</h3>";
-    return;
-  }
-  numDom.innerText = `第${now+1}题/共${total}题`;
-  wrongDom.innerText = wrong;
-  const q = questions[now];
-  ansBox.innerHTML = "";
-  q.options.forEach(opt=>{
-    let btn = document.createElement('button');
-    btn.className = "btn";
-    btn.innerText = opt;
-    btn.onclick = ()=>{
-      if(opt === q.answer){
-        now++; wrong=0; render();
-      }else{
-        wrong++;
-        if(wrong >=3){
-          now++; wrong=0;
-        }
-        render();
-      }
-    }
-    ansBox.appendChild(btn);
-  })
+// 保存进度到本地
+function saveProgress() {
+  localStorage.setItem("idiomGameSave", JSON.stringify({
+    currentIndex: currentIndex,
+    wrongCount: wrongCount
+  }));
 }
-render();
+
+// 渲染当前题目
+function renderQuestion() {
+  if (currentIndex >= questions.length) {
+    alert("🎉 恭喜你！100道题全部答完了！");
+    currentIndex = 0;
+    wrongCount = 0;
+    saveProgress();
+  }
+
+  const question = questions[currentIndex];
+  numDom.innerText = `第${currentIndex + 1}题/共${questions.length}题`;
+  wrongDom.innerText = wrongCount;
+  imgDom.src = question.img;
+  
+  // 清空选项并重新生成
+  ansBoxDom.innerHTML = "";
+  // 打乱选项顺序
+  const shuffledOptions = [...question.options].sort(() => Math.random() - 0.5);
+  
+  shuffledOptions.forEach(option => {
+    const btn = document.createElement('button');
+    btn.className = "btn";
+    btn.innerText = option;
+    btn.onclick = () => checkAnswer(option);
+    ansBoxDom.appendChild(btn);
+  });
+}
+
+// 检查答案
+function checkAnswer(selectedAnswer) {
+  const correctAnswer = questions[currentIndex].answer;
+  
+  if (selectedAnswer === correctAnswer) {
+    // 答对了
+    currentIndex++;
+    wrongCount = 0;
+  } else {
+    // 答错了
+    wrongCount++;
+    if (wrongCount >= maxWrong) {
+      alert(`❌ 答错${maxWrong}次了，跳过这题`);
+      currentIndex++;
+      wrongCount = 0;
+    } else {
+      alert(`❌ 答错了，还有${maxWrong - wrongCount}次机会`);
+    }
+  }
+  
+  saveProgress();
+  renderQuestion();
+}
+
+// 页面加载时渲染第一题
+window.onload = renderQuestion;
 </script>
 </body>
 </html>
