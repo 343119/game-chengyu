@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>看图猜成语（300题）</title>
+<style>
+body{font-family:Arial,sans-serif;text-align:center;background:#f5f5f5;margin:0;padding:10px;}
+#box{max-width:500px;margin:0 auto;background:#fff;padding:15px;border-radius:10px;}
+img{max-width:100%;border-radius:8px;}
+.btn{padding:10px 16px;margin:5px;border:none;border-radius:6px;background:#007bff;color:white;font-size:16px;}
+.btn:active{opacity:0.8;}
+#info{margin:10px 0;}
+</style>
+</head>
+<body>
+<div id="box">
+<h2>看图猜成语</h2>
+<div id="info">
+<span id="num">第1题/共300题</span>
+<br>
+答错：<span id="wrong">0</span>/3
+</div>
+<img id="img" src="" alt="题目图">
+<div id="ansBox"></div>
+</div>
+
+<script>
+// 300题（图用占位，你可后期换图）
+const questions = [];
+for(let i=1;i<=300;i++){
+  questions.push({
+    img: "https://picsum.photos/400/300?random="+i,
+    answer: "成语"+i,
+    options: ["成语"+i, "错A"+i, "错B"+i, "错C"+i]
+  });
+}
+
+let idx=0, wrong=0, maxWrong=3;
+const img=document.getElementById("img");
+const ansBox=document.getElementById("ansBox");
+const numSpan=document.getElementById("num");
+const wrongSpan=document.getElementById("wrong");
+
+function load(){
+  const q=questions[idx];
+  numSpan.textContent=`第${idx+1}题/共300题`;
+  img.src=q.img;
+  ansBox.innerHTML="";
+  q.options.sort(()=>Math.random()-0.5).forEach(opt=>{
+    const btn=document.createElement("button");
+    btn.className="btn";
+    btn.textContent=opt;
+    btn.onclick=()=>check(opt);
+    ansBox.appendChild(btn);
+  });
+}
+
+function check(opt){
+  const q=questions[idx];
+  if(opt===q.answer){
+    idx++;
+    if(idx>=questions.length){
+      alert("恭喜！全部答完！");
+      idx=0; wrong=0;
+    }
+  }else{
+    wrong++;
+    wrongSpan.textContent=wrong;
+    if(wrong>=maxWrong){
+      alert("答错3次，重置到下一题");
+      idx++; wrong=0;
+      if(idx>=questions.length) idx=0;
+    }
+  }
+  load();
+}
+
+load();
+</script>
+</body>
+</html>
